@@ -1,0 +1,10 @@
+services:
+  socialcred:
+    image: ghcr.io/jake-schuler/socialcred:latest
+    container_name: socialcred
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    volumes:
+      - ${PWD}/.env:/usr/src/app/.env
+      - ${PWD}/socialcred.db:/usr/src/app/socialcred.db
