@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocialCred</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <link rel="icon" href="/f/static/JS.svg" type="image/svg+xml">
+    <style>
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+        }
+        h4 {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body class="container">
+    <h1>SocialCred</h1>
+    <h4>A Social Credit System for a FRC Team</h2>
+    <table>
+        <thread>
+            <tr>
+                <th>Name</th>
+                <th>Social Credits</th>
+            </tr>
+        </thread>
+        <tbody>
+            {{range .users}}
+            <tr>
+                <td>{{.Name}}</td>
+                <td>{{.SocialCredits}}</td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
+    <details>
+        <summary>More...</summary>
+        <a href="/auth"><button>Log in</button></a>
+    </details>
+    <p style="text-align: center;">Created with ❤️ By <a href="https://github.com/Jake-Schuler">Jake Schuler</a></p>
+</body>
+</html>

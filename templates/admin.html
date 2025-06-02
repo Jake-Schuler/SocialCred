@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocialCred</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <link rel="icon" href="/f/static/JS.svg" type="image/svg+xml">
+    <style>
+        h1, h4 {
+            text-align: center;
+            margin-top: 40px;
+        }
+        table input {
+            width: 100%;
+        }
+        td > .grid {
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body class="container">
+    <h1>SocialCred</h1>
+    <h4>Admin Page</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Social Credits</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range .users}}
+            <tr>
+                <td>{{.Name}}</td>
+                <td><input type="number" value="{{.SocialCredits}}" autocomplete="off"></td>
+                <td>
+                    <div class="grid">
+                        <button class="update">Update</button>
+                        <button class="delete">Delete</button>
+                    </div>
+                </td>
+            </tr>
+            {{end}}
+            <tr>
+                <td><input id="newUserName" placeholder="New User Name" autocomplete="off"></td>
+                <td><input id="newUserCredits" placeholder="0" type="number" autocomplete="off"></td>
+                <td><button id="addUser">Add User</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <details>
+        <summary>Logged in as: {{.email}}</summary>
+        <a href="/logout"><button>Logout</button></a>
+    </details>
+    <p style="text-align: center;">
+        Created with ❤️ by 
+        <a href="https://github.com/Jake-Schuler">Jake Schuler</a>
+    </p>
+
+    <script>
+        // Update Social Credits
+        document.querySelectorAll('.update').forEach(button => {
+            button.addEventListener('click', () => {
+                const row = button.closest('tr');
+                const name = row.querySelector('td:first-child').textContent.trim();
+                const creditsInput = row.querySelector('input[type="number"]');
+                const newValue = creditsInput.value.trim();
+
+                fetch('/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, socialCredits: newValue })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Social Credits updated successfully!');
+                        location.reload();
+                    } else {
+                        alert('Error updating Social Credits.');
+                    }
+                });
+            });
+        });
+
+        // Delete User
+        document.querySelectorAll('.delete').forEach(button => {
+            button.addEventListener('click', () => {
+                const row = button.closest('tr');
+                const name = row.querySelector('td:first-child').textContent.trim();
+
+                if (!confirm(`Are you sure you want to delete ${name}?`)) return;
+
+                fetch('/delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('User deleted successfully!');
+                        location.reload();
+                    } else {
+                        alert('Error deleting user.');
+                    }
+                });
+            });
+        });
+
+        // Add New User
+        document.getElementById('addUser').addEventListener('click', () => {
+            const name = document.getElementById('newUserName').value.trim();
+            const socialCredits = document.getElementById('newUserCredits').value.trim();
+
+            if (!name) {
+                alert('Name cannot be empty.');
+                return;
+            }
+
+            if (!socialCredits || isNaN(socialCredits)) {
+                alert('Social Credits must be a valid number.');
+                return;
+            }
+
+            fetch('/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, socialCredits })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('User added successfully!');
+                    location.reload();
+                } else {
+                    alert('Error adding user.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
