@@ -150,6 +150,9 @@ func main() {
 	})
 
 	r.GET("/auth/callback", func(c *gin.Context) {
+		q := c.Request.URL.Query()
+		q.Add("provider", "github")
+		c.Request.URL.RawQuery = q.Encode()
 		user, err := gothic.CompleteUserAuth(c.Writer, c.Request)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to complete user authentication: " + err.Error()})
