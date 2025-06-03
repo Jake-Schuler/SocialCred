@@ -105,6 +105,8 @@ func main() {
 		"read:user", "user:email"),
 	)
 
+	motd := ""
+
 	// Initialize session store
 	store := initSessionStore()
 
@@ -115,14 +117,31 @@ func main() {
 
 	r.StaticFS("/f", http.FS(static))
 
-	// Define a simple route
+	// Webpage routes
 	r.GET("/", func(c *gin.Context) {
 		var users []User
 		// Fetch users and score from db in descending order of SocialCredits
 		db.Order("social_credits DESC").Find(&users)
-		c.HTML(http.StatusOK, "index.html", gin.H{"title": "SocialCred", "users": users})
+		c.HTML(http.StatusOK, "index.html", gin.H{
+			"title": "SocialCred",
+			"users": users,
+			"motd":  motd,
+		})
 	})
 
+	r.GET("/admin", requireLogin(store), func(c *gin.Context) {
+		userEmail := c.GetString("user_email")
+		var users []User
+		db.Order("social_credits DESC").Find(&users)
+		c.HTML(http.StatusOK, "admin.html", gin.H{
+			"title": "Admin Panel",
+			"email": userEmail,
+			"users": users,
+			"motd":  motd,
+		})
+	})
+
+	// Authentication routes
 	r.GET("/auth", func(c *gin.Context) {
 		q := c.Request.URL.Query()
 		q.Add("provider", "github")
@@ -179,17 +198,7 @@ func main() {
 		c.Redirect(http.StatusSeeOther, "/")
 	})
 
-	r.GET("/admin", requireLogin(store), func(c *gin.Context) {
-		userEmail := c.GetString("user_email")
-		var users []User
-		db.Order("social_credits DESC").Find(&users)
-		c.HTML(http.StatusOK, "admin.html", gin.H{
-			"title": "Admin Panel",
-			"email": userEmail,
-			"users": users,
-		})
-	})
-
+	// Functionality routes
 	r.POST("/update", requireLogin(store), func(c *gin.Context) {
 		var payload struct {
 			Name          string `json:"name"`
@@ -269,6 +278,18 @@ func main() {
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{"success": true})
+	})
+
+	r.POST("/motd", requireLogin(store), func(c *gin.Context) {
+		var payload struct {
+			Message string `json:"message"`
+		}
+		if err := c.BindJSON(&payload); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
+			return
+		}
+		motd = payload.Message
+		c.JSON(http.StatusOK, gin.H{"success": true, "message": motd})
 	})
 
 	// Start the server on port 8080

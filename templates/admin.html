@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,18 +8,22 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
     <link rel="icon" href="/f/static/JS.svg" type="image/svg+xml">
     <style>
-        h1, h4 {
+        h1,
+        h4 {
             text-align: center;
             margin-top: 40px;
         }
+
         table input {
             width: 100%;
         }
-        td > .grid {
+
+        td>.grid {
             gap: 0.5rem;
         }
     </style>
 </head>
+
 <body class="container">
     <h1>SocialCred</h1>
     <h4>Admin Page</h4>
@@ -50,12 +55,16 @@
             </tr>
         </tbody>
     </table>
+    <div style="text-align: center; margin-top: 20px;" class="grid">
+        <input id="motd" placeholder="Message of the Day" value="{{.motd}}" autocomplete="off">
+        <button id="updateMOTD">Update MOTD</button>
+    </div>
     <details>
         <summary>Logged in as: {{.email}}</summary>
         <a href="/logout"><button>Logout</button></a>
     </details>
     <p style="text-align: center;">
-        Created with ❤️ by 
+        Created with ❤️ by
         <a href="https://github.com/Jake-Schuler">Jake Schuler</a>
     </p>
 
@@ -73,15 +82,15 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name, socialCredits: newValue })
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Social Credits updated successfully!');
-                        location.reload();
-                    } else {
-                        alert('Error updating Social Credits.');
-                    }
-                });
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Social Credits updated successfully!');
+                            location.reload();
+                        } else {
+                            alert('Error updating Social Credits.');
+                        }
+                    });
             });
         });
 
@@ -98,15 +107,15 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name })
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('User deleted successfully!');
-                        location.reload();
-                    } else {
-                        alert('Error deleting user.');
-                    }
-                });
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('User deleted successfully!');
+                            location.reload();
+                        } else {
+                            alert('Error deleting user.');
+                        }
+                    });
             });
         });
 
@@ -130,16 +139,37 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, socialCredits })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('User added successfully!');
-                    location.reload();
-                } else {
-                    alert('Error adding user.');
-                }
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('User added successfully!');
+                        location.reload();
+                    } else {
+                        alert('Error adding user.');
+                    }
+                });
+        });
+
+        // Update Message of the Day
+        document.getElementById('updateMOTD').addEventListener('click', () => {
+            const message = document.getElementById('motd').value.trim();
+
+            fetch('/motd', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Message of the Day updated successfully!');
+                        location.reload();
+                    } else {
+                        alert('Error updating Message of the Day.');
+                    }
+                });
         });
     </script>
 </body>
+
 </html>
