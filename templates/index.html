@@ -7,47 +7,40 @@
     <title>SocialCred</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
     <link rel="icon" href="/f/static/JS.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/f/static/style.css">
     <meta content="SocialCred" property="og:title" />
     <meta content="A Social Credit System for a FRC Team" property="og:description" />
     <meta content="#00a0c3" data-react-helmet="true" name="theme-color" />
-    <style>
-        h1 {
-            text-align: center;
-            margin-top: 50px;
-        }
-
-        h4 {
-            text-align: center;
-            margin-top: 20px;
-        }
-    </style>
 </head>
 
 <body class="container">
     <h1>SocialCred</h1>
     <h4>A Social Credit System for a FRC Team</h2>
-    <h4>{{.motd}}</h4>
-        <table>
-            <thread>
-                <tr>
-                    <th>Name</th>
-                    <th>Social Credits</th>
-                </tr>
-            </thread>
-            <tbody>
-                {{range .users}}
-                <tr>
-                    <td>{{.Name}}</td>
-                    <td>{{.SocialCredits}}</td>
-                </tr>
-                {{end}}
-            </tbody>
-        </table>
+        <h3>{{.motd}}
+    </h4>
+    <table>
+        <thread>
+            <tr>
+                <th>Name</th>
+                <th>Social Credits</th>
+            </tr>
+        </thread>
+        <tbody>
+            {{range .users}}
+            <tr>
+                <td>{{.Name}}</td>
+                <td>{{.SocialCredits}}</td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
+    <div class="extras">
         <details>
             <summary>More...</summary>
             <a href="/auth"><button>Log in</button></a>
         </details>
         <p style="text-align: center;">Created with ❤️ By <a href="https://github.com/Jake-Schuler">Jake Schuler</a></p>
+    </div>
 </body>
 
 </html>

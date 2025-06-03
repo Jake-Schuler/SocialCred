@@ -5,23 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SocialCred</title>
+    <link rel="stylesheet" href="/f/static/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
     <link rel="icon" href="/f/static/JS.svg" type="image/svg+xml">
-    <style>
-        h1,
-        h4 {
-            text-align: center;
-            margin-top: 40px;
-        }
-
-        table input {
-            width: 100%;
-        }
-
-        td>.grid {
-            gap: 0.5rem;
-        }
-    </style>
 </head>
 
 <body class="container">
@@ -41,7 +27,7 @@
                 <td>{{.Name}}</td>
                 <td><input type="number" value="{{.SocialCredits}}" autocomplete="off"></td>
                 <td>
-                    <div class="grid">
+                    <div class="grid grid-vertical">
                         <button class="update">Update</button>
                         <button class="delete">Delete</button>
                     </div>
@@ -55,18 +41,20 @@
             </tr>
         </tbody>
     </table>
-    <div style="text-align: center; margin-top: 20px;" class="grid">
-        <input id="motd" placeholder="Message of the Day" value="{{.motd}}" autocomplete="off">
-        <button id="updateMOTD">Update MOTD</button>
+    <div class="extras">
+        <div style="text-align: center; margin-top: 20px;" class="grid">
+            <input id="motd" placeholder="Message of the Day" value="{{.motd}}" autocomplete="off">
+            <button id="updateMOTD">Update MOTD</button>
+        </div>
+        <details>
+            <summary>Logged in as: {{.email}}</summary>
+            <a href="/logout"><button>Logout</button></a>
+        </details>
+        <p style="text-align: center;">
+            Created with ❤️ by
+            <a href="https://github.com/Jake-Schuler">Jake Schuler</a>
+        </p>
     </div>
-    <details>
-        <summary>Logged in as: {{.email}}</summary>
-        <a href="/logout"><button>Logout</button></a>
-    </details>
-    <p style="text-align: center;">
-        Created with ❤️ by
-        <a href="https://github.com/Jake-Schuler">Jake Schuler</a>
-    </p>
 
     <script>
         // Update Social Credits
